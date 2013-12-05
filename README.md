@@ -4,7 +4,7 @@ nao_scripts
 nao_identification_datalogger.py
 --------------------------------
 
-#Upload on the Nao
+###Upload on the Nao
 To upload the script on the Nao, you can use scp:
 ```
 scp nao_identification_datalogger.py nao@192.168.1.1:/home/nao/nao_identification_datalogger.py
@@ -14,7 +14,7 @@ where you have to substitute 192.168.1.1 with Nao IP address.
 Or simply use the [upload utility of Choreographe]
 (http://www.aldebaran-robotics.com/documentation/software/choregraphe/file_upload_download.html)
 
-#Execute
+###Execute
 You can execute the script directly from the nao terminal:
 ```
 ssh  nao@192.168.1.1
