@@ -4,6 +4,7 @@
 import sys
 import time
 import os
+from optparse import OptionParser
 
 import naoqi
 from naoqi import ALProxy
@@ -11,7 +12,7 @@ from naoqi import ALProxy
 #This is the list of the names of the device to log
 sensor_to_log_list = [ 'DCM/Time',
                        'DCM/CycleTime',
-                       'Head/Touch/Middle'
+                       'Device/SubDeviceList/Head/Touch/Middle/Sensor/Value',
                        "Device/SubDeviceList/HeadPitch/Position/Sensor/Value",
                        "Device/SubDeviceList/HeadYaw/Position/Sensor/Value",
                        "Device/SubDeviceList/LAnklePitch/Position/Sensor/Value",
@@ -44,7 +45,7 @@ sensor_to_log_list = [ 'DCM/Time',
                        "Device/SubDeviceList/InertialSensor/GyrY/Sensor/Value",
                        "Device/SubDeviceList/InertialSensor/AngleX/Sensor/Value",
                        "Device/SubDeviceList/InertialSensor/AngleY/Sensor/Value",
-                       "Device/SubDeviceList/LFoot/FSR/FrontLeft/Sensor/Value",
+		       "Device/SubDeviceList/LFoot/FSR/FrontLeft/Sensor/Value",
                        "Device/SubDeviceList/LFoot/FSR/FrontRight/Sensor/Value",
                        "Device/SubDeviceList/LFoot/FSR/RearLeft/Sensor/Value",
                        "Device/SubDeviceList/LFoot/FSR/RearRight/Sensor/Value",
@@ -52,9 +53,8 @@ sensor_to_log_list = [ 'DCM/Time',
                        "Device/SubDeviceList/RFoot/FSR/FrontRight/Sensor/Value",
                        "Device/SubDeviceList/RFoot/FSR/RearLeft/Sensor/Value",
                        "Device/SubDeviceList/RFoot/FSR/RearRight/Sensor/Value"]
-
                         
-def getdata(NAOIP='nao.local',NAOPORT=9559,PERIOD_IN_SECONDS=0.03):                                        #set name
+def getdata(NAOIP='nao.local',NAOPORT=9559,PERIOD_IN_SECONDS=0.05):                                        #set name
     log=ALProxy('ALLogger',NAOIP,NAOPORT)                                #call ALLogger
     frame = ALProxy('ALFileManager',NAOIP,NAOPORT)                        #call ALFileManager
     
@@ -66,9 +66,9 @@ def getdata(NAOIP='nao.local',NAOPORT=9559,PERIOD_IN_SECONDS=0.03):             
     except Exception,e:
         log.info('log','file opened failed!!')
         exit('stop')                                                        #stop when failed    returns "1"
-    
+ 
     mem = ALProxy('ALMemory',NAOIP,NAOPORT)                            #call ALMemory
-    output.write('SampleNumber\t'+('\t'.join(str_data)))
+    output.write('SampleNumber\t'+('\t'.join(sensor_to_log_list)))
     output.flush()
     x=0
     log.info('log','loop start')
@@ -81,9 +81,11 @@ def getdata(NAOIP='nao.local',NAOPORT=9559,PERIOD_IN_SECONDS=0.03):             
         output.write(temp_data+'\n')
         x += 1
         end_time = time.time()
-        log.info('log','Seconds for getting data and putting in file: '+str(end_time-start_time))
+        #print('Seconds for getting data and putting in file: '+str(end_time-start_time))
         #quick hack to avoid busy waiting 
-        time.sleep(PERIOD_IN_SECONDS)
+        remaining_time = PERIOD_IN_SECONDS-end_time+start_time;
+	if( remaining_time > 0 ):
+	    time.sleep(remaining_time)
         
 def main():
     """ Script to dump values of the sensors related to identifiation on 
@@ -100,7 +102,7 @@ def main():
         dest="pport",
         type="int")
     parser.set_defaults(
-        pip=NAO_IP,
+        pip='nao.local',
         pport=9559)
 
     (opts, args_) = parser.parse_args()
@@ -110,5 +112,5 @@ def main():
     #todo: use pip and pport configure by NAO
     getdata()
     
-    
 
+main()    
