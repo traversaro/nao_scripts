@@ -4,6 +4,8 @@ nao_scripts
 nao_identification_datalogger.py
 --------------------------------
 
+Script developed at [GV Lab](http://www.tuat.ac.jp/~venture/), [Tokyo University of Agriculture and Tecnology](http://www.tuat.ac.jp/en/) .
+
 ###Upload on the Nao
 To upload the script on the Nao, you can use scp:
 ```
