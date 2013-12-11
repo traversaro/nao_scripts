@@ -68,7 +68,7 @@ def getdata(NAOIP='nao.local',NAOPORT=9559,PERIOD_IN_SECONDS=0.05):             
         exit('stop')                                                        #stop when failed    returns "1"
  
     mem = ALProxy('ALMemory',NAOIP,NAOPORT)                            #call ALMemory
-    output.write('SampleNumber\t'+('\t'.join(sensor_to_log_list)))
+    output.write('SampleNumber\t'+('\t'.join(sensor_to_log_list))+'\n')
     output.flush()
     x=0
     log.info('log','loop start')
